@@ -1,0 +1,191 @@
+/* =====================================================
+   TIC TAC TOE — Estilos visuales
+   Tema oscuro
+   ===================================================== */
+
+:root {
+  --ttt-board-size: min(80vw, 400px);
+  --ttt-gap: 8px;
+  --ttt-bg-cell: #1d1f23;
+  --ttt-bg-hover: #2f3336;
+  --ttt-border-cell: #2f3336;
+  --ttt-color-x: #4fc3f7;
+  --ttt-color-o: #ff8a65;
+  --ttt-color-text: #e7e9ea;
+  --ttt-color-muted: #71767b;
+  --ttt-radius: 12px;
+  --ttt-bg-body: #0f1419;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--ttt-bg-body);
+  min-height: 100vh;
+  font-size: 62.5%;
+}
+/* Contenedor principal */
+.ttt-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100dvh;
+  box-sizing: border-box;
+}
+/* Título */
+.ttt-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--ttt-color-text);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  user-select: none;
+  margin: 0;
+}
+
+/* Tablero (grid 3x3) */
+.ttt-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--ttt-gap);
+  width: var(--ttt-board-size);
+  aspect-ratio: 1 / 1;
+}
+/* ==========================================
+   Clase SQUARE (usada por Square.jsx)
+   ========================================== */
+
+.square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ttt-bg-cell);
+  border: 1px solid var(--ttt-border-cell);
+  border-radius: var(--ttt-radius);
+  font-size: clamp(2.5rem, 10vw, 5rem);
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  aspect-ratio: 1 / 1;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+/* Celda vacía → hover se ve */
+.square:empty:hover {
+  background: var(--ttt-bg-hover);
+  transform: scale(1.03);
+}
+.square:active {
+  transform: scale(0.95);
+}
+/* Contenido X / O */
+.square:not(:empty) {
+  animation: ttt-pop 0.25s ease-out forwards;
+}
+
+/* Color X (celeste) */
+.square--x {
+  color: var(--ttt-color-x);
+}
+.ttt-reset:hover {
+  background: var(--ttt-bg-hover);
+  transform: scale(1.03);
+}
+/* Color O (naranja) */
+.square--o {
+  color: var(--ttt-color-o);
+}
+
+/* ==========================================
+   Indicadores de turno (section .Turn)
+   ========================================== */
+
+.Turn {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.Turn .square {
+  width: 60px;
+  height: 60px;
+  font-size: 1.8rem;
+  cursor: default;
+  pointer-events: none;
+  background: transparent;
+  border-color: transparent;
+  color: var(--ttt-color-muted);
+}
+
+.Turn .square.selected {
+  background: var(--ttt-bg-cell);
+  border-color: var(--ttt-color-x);
+  box-shadow: 0 0 12px rgba(79, 195, 247, 0.3);
+  color: var(--ttt-color-x);
+}
+
+.Turn .square--o.selected {
+  border-color: var(--ttt-color-o);
+  box-shadow: 0 0 12px rgba(255, 138, 101, 0.3);
+  color: var(--ttt-color-o);
+}
+
+/* ==========================================
+   Modal (Winner)
+   ========================================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: #1d1f23;
+  padding: 2rem 3rem;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid #2f3336;
+  color: var(--ttt-color-text);
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.modal-content p:first-child {
+  font-size: 2rem;
+}
+
+/* ==========================================
+   Botón de reinicio
+   ========================================= */
+.ttt-reset {
+  font-size: 2rem;
+  color: var(--ttt-color-text);
+  text-transform: uppercase;
+  margin: 0;
+  background-color: #1d1f23;
+  box-sizing: border-box;
+  padding: 16px;
+  font-size: 1.6rem;
+  cursor: pointer;
+  border-radius: var(--ttt-radius);
+  border: 0cap;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
