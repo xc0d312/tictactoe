@@ -3,7 +3,7 @@ export const Winner = ({ winner, onReset }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <p>
-          {winner == "Draw" ? "😐 Es un empate" : `🏆 El ganador es ${winner}`}
+          {winner === "Draw" ? "😐 Es un empate" : `🏆 El ganador es ${winner}`}
         </p>
       </div>
       <button className="ttt-reset" onClick={onReset}>

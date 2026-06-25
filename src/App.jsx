@@ -2,45 +2,46 @@ import "./style.css/tictac.css";
 import { use, useState } from "react";
 import Square from "./components/Square";
 import { Winner } from "./components/Winner";
-import { turns, patternsWinner } from "./constants/tictactoe";
+import { turns } from "./constants/tictactoe";
+import { checkWinner } from "./utils/board";
+import { INITIAL_STATE_GAME } from "./utils/gameHelper";
 
 function App() {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [turn, setTurn] = useState(turns.X);
-  const [winner, setWinner] = useState(null);
+  const [game, setGame] = useState(INITIAL_STATE_GAME);
+  const { board, turn, winner } = game;
 
   const onClickSquare = (index) => {
     //validar que no haya ganador
     if (winner) return;
     //validar que no este ocupda ya esa pocision
-    if (board[index] != null) return;
-    const newBoard = [...board];
-    newBoard[index] = turn;
-    setBoard(newBoard);
-    const result = checkWinner(newBoard);
-    if (result) {
-      setWinner(result);
-      return;
-    }
-    setTurn(turn === turns.X ? turns.O : turns.X);
-  };
-  const checkWinner = (board) => {
-    const patterWinner = patternsWinner.find((patter) => {
-      const marca = board[patter[0]];
-      return marca != null && patter.every((p) => board[p] == marca);
-    });
-    if (patterWinner) return board[patterWinner[0]];
+    if (board[index]) return;
+    //actualizar el estado del juego
+    // const newBoard = [...board];
+    // newBoard[index] = turn;
+    // const newGame = {
+    //   ...game,
+    //   board: newBoard,
+    //   turn: turn === turns.X ? turns.O : turns.X,
+    //   winner: checkWinner(newBoard),
+    // };
+    // setGame(newGame);
 
-    const draw = board.every((_, index) => {
-      return board[index] != null;
+    setGame((prevGame) => {
+      const newBoard = [...prevGame.board];
+      newBoard[index] = prevGame.turn;
+      const newTurn = prevGame.turn === turns.X ? turns.O : turns.X;
+      const newWinner = checkWinner(newBoard);
+      return {
+        ...prevGame,
+        board: newBoard,
+        turn: newTurn,
+        winner: newWinner,
+      };
     });
-
-    return draw ? "Draw" : false;
   };
+
   const resetGame = () => {
-    setBoard(Array(9).fill(null));
-    setTurn(turns.X);
-    setWinner(null);
+    setGame(INITIAL_STATE_GAME);
   };
 
   return (
