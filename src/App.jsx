@@ -2,9 +2,9 @@ import "./style.css/tictac.css";
 import { use, useState } from "react";
 import Square from "./components/Square";
 import { Winner } from "./components/Winner";
-import { turns } from "./constants/tictactoe";
-import { checkWinner } from "./utils/board";
+import { checkWinner, updateBoard } from "./utils/board";
 import { INITIAL_STATE_GAME } from "./utils/gameHelper";
+import { turns } from "./constants/tictactoe";
 
 function App() {
   const [game, setGame] = useState(INITIAL_STATE_GAME);
@@ -26,29 +26,16 @@ function App() {
     // };
     // setGame(newGame);
 
-    setGame((prevGame) => {
-      const newBoard = [...prevGame.board];
-      newBoard[index] = prevGame.turn;
-      const newTurn = prevGame.turn === turns.X ? turns.O : turns.X;
-      const newWinner = checkWinner(newBoard);
-      return {
-        ...prevGame,
-        board: newBoard,
-        turn: newTurn,
-        winner: newWinner,
-      };
-    });
-  };
-
-  const resetGame = () => {
-    setGame(INITIAL_STATE_GAME);
+    setGame((prevGame) => updateBoard(prevGame, index, checkWinner));
   };
 
   return (
     <main className="ttt-game">
       <h1 className="ttt-title">Tic Tac Toe</h1>
 
-      {winner && <Winner winner={winner} onReset={resetGame} />}
+      {winner && (
+        <Winner winner={winner} onReset={() => setGame(INITIAL_STATE_GAME)} />
+      )}
       <div className="ttt-board">
         {board.map((value, index) => {
           return (

@@ -1,4 +1,5 @@
 import { patternsWinner } from "../constants/tictactoe";
+import { turns } from "../constants/tictactoe";
 
 export const checkWinner = (board) => {
   const patterWinner = patternsWinner.find((patter) => {
@@ -13,4 +14,17 @@ export const checkWinner = (board) => {
   });
 
   return draw ? "Draw" : false;
+};
+
+export const updateBoard = (prevGame, index, checkWinner) => {
+  const newBoard = [...prevGame.board];
+  newBoard[index] = prevGame.turn;
+  const newTurn = prevGame.turn === turns.X ? turns.O : turns.X;
+  const newWinner = checkWinner(newBoard);
+  return {
+    ...prevGame,
+    board: newBoard,
+    turn: newTurn,
+    winner: newWinner,
+  };
 };
