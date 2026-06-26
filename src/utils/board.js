@@ -28,3 +28,5 @@ export const updateBoard = (prevGame, index, checkWinner) => {
     winner: newWinner,
   };
 };
+
+

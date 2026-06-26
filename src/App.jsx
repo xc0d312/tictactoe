@@ -5,9 +5,16 @@ import { Winner } from "./components/Winner";
 import { checkWinner, updateBoard } from "./utils/board";
 import { INITIAL_STATE_GAME } from "./utils/gameHelper";
 import { turns } from "./constants/tictactoe";
+import { saveGame, resetGame } from "./utils/storaje";
 
 function App() {
-  const [game, setGame] = useState(INITIAL_STATE_GAME);
+  const [game, setGame] = useState(() => {
+    const fromStorage = window.localStorage.getItem(
+      "initialGame",
+      INITIAL_STATE_GAME,
+    );
+    return fromStorage ? JSON.parse(fromStorage) : INITIAL_STATE_GAME;
+  });
   const { board, turn, winner } = game;
 
   const onClickSquare = (index) => {
@@ -26,16 +33,18 @@ function App() {
     // };
     // setGame(newGame);
 
-    setGame((prevGame) => updateBoard(prevGame, index, checkWinner));
+    setGame((prevGame) => {
+      const newGame = updateBoard(prevGame, index, checkWinner);
+      saveGame(newGame);
+      return newGame;
+    });
   };
 
   return (
     <main className="ttt-game">
       <h1 className="ttt-title">Tic Tac Toe</h1>
 
-      {winner && (
-        <Winner winner={winner} onReset={() => setGame(INITIAL_STATE_GAME)} />
-      )}
+      {winner && <Winner winner={winner} onReset={() => setGame(resetGame)} />}
       <div className="ttt-board">
         {board.map((value, index) => {
           return (
