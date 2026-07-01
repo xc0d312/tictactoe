@@ -168,6 +168,9 @@ body {
 }
 .modal-content p:first-child {
   font-size: 2rem;
+  border: #71767b 1px solid;
+  padding: 8px;
+  border-radius: 8px;
 }
 
 /* ==========================================
@@ -185,6 +188,31 @@ body {
   cursor: pointer;
   border-radius: var(--ttt-radius);
   border: 0cap;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+.btn-reset {
+  font-size: 2rem;
+  color: var(--ttt-color-text);
+  text-transform: uppercase;
+  margin: 0;
+  background-color: #1d1f23;
+  box-sizing: border-box;
+  padding: 16px;
+  font-size: 1.6rem;
+  cursor: pointer;
+  border-radius: var(--ttt-radius);
+  border: 0cap;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.btn-reset:hover {
+  background-color: #3d4047;
+  transform: scale(1);
+  transform-origin: center;
   transition:
     background 0.2s ease,
     transform 0.15s ease;

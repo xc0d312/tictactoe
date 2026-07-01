@@ -5,23 +5,26 @@ import { Winner } from "./components/Winner";
 import { checkWinner, updateBoard } from "./utils/board";
 import { INITIAL_STATE_GAME } from "./utils/gameHelper";
 import { turns } from "./constants/tictactoe";
-import { saveGame, resetGame } from "./utils/storaje";
+import { Turn } from "./components/Square";
+import {
+  saveGameStorage,
+  resetGameStorage,
+  getGameStorage,
+} from "./utils/storaje";
 
 function App() {
   const [game, setGame] = useState(() => {
-    const fromStorage = window.localStorage.getItem(
-      "initialGame",
-      INITIAL_STATE_GAME,
-    );
-    return fromStorage ? JSON.parse(fromStorage) : INITIAL_STATE_GAME;
+    const fromStorage = getGameStorage(INITIAL_STATE_GAME);
+    return fromStorage ? fromStorage : INITIAL_STATE_GAME;
   });
   const { board, turn, winner } = game;
 
-  const onClickSquare = (index) => {
+  const onClickSquare = (indexRow, indexCell) => {
     //validar que no haya ganador
     if (winner) return;
+
     //validar que no este ocupda ya esa pocision
-    if (board[index]) return;
+    if (board[indexRow][indexCell]) return;
     //actualizar el estado del juego
     // const newBoard = [...board];
     // newBoard[index] = turn;
@@ -34,8 +37,8 @@ function App() {
     // setGame(newGame);
 
     setGame((prevGame) => {
-      const newGame = updateBoard(prevGame, index, checkWinner);
-      saveGame(newGame);
+      const newGame = updateBoard(prevGame, indexRow, indexCell, checkWinner);
+      saveGameStorage(newGame);
       return newGame;
     });
   };
@@ -44,32 +47,57 @@ function App() {
     <main className="ttt-game">
       <h1 className="ttt-title">Tic Tac Toe</h1>
 
-      {winner && <Winner winner={winner} onReset={() => setGame(resetGame)} />}
+      {winner && (
+        <Winner winner={winner} onReset={() => setGame(resetGameStorage)} />
+      )}
+      <button
+        className="btn-reset"
+        onClick={() => setGame(resetGameStorage)}
+      >
+        Reiniciar Juego
+      </button>
+
       <div className="ttt-board">
-        {board.map((value, index) => {
-          return (
-            <Square
-              key={index}
-              value={board[index]}
-              updateBoard={() => onClickSquare(index)}
-            >
-              {board[index]}
-            </Square>
-          );
-        })}
+        {
+          /* {board.map((row, index) => {
+          // return (
+          //   // <Square
+          //   //   key={index}
+          //   //   value={board[index]}
+          //   //   updateBoard={() => onClickSquare(index)}
+          //   // >
+          //   //   {board[index]}
+          //   // </Square>
+          //   <Square
+          //     key={index}
+          //     // value={board[index]}
+          //     updateBoard={() => onClickSquare(index)}
+          //     row={row}
+          //   ></Square>
+          // );
+        
+        })} */
+          board.map((row, index) => {
+            return (
+              <Square
+                indexRow={index}
+                row={row}
+                updateBoard={onClickSquare}
+              ></Square>
+            );
+          })
+        }
       </div>
       <section className="Turn">
-        <Square isSelected={turn === turns.X} value={turns.X}>
+        <Turn isSelected={turn === turns.X} value={turns.X}>
           ✕
-        </Square>
-        <Square isSelected={turn === turns.O} value={turns.O}>
+        </Turn>
+        <Turn isSelected={turn === turns.O} value={turns.O}>
           ◯
-        </Square>
+        </Turn>
       </section>
     </main>
   );
 }
 
 export default App;
-
-//pasos para crear un tic tac toe
